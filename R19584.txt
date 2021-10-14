@@ -1,0 +1,47 @@
+Zadání: Řešení generuje rodiny-osoby s náhodnými jmény a adresami. Rodina má stejné příjmení a adresu. Následně lze jednotlivé osoby upravit a výsledek uložit do souboru.
+
+- generování rodin/osob nefunguje správně
+  > Nalezeno chyb: 4
+- ukládání do souboru nefunguje správně
+  > Nalezeno chyb: 1
+- editace osoby nefunguje správně
+  > Nalezeno chyb: 1
+- výběr osoby ze seznamu osob podle indexu nefunguje správně
+  > Nalezeno chyb: 0
+
+Nalezené Chyby:
+ - Main.java
+ > addFamilies()
+   > 19: int familyCount = promptInt("Zadejte počet rodin:", q -> q >= 0);
+                                                                     ^
+         Chyba: Nedává smysl moct zadat 0 rodin
+		 Oprava: int familyCount = promptInt("Zadejte počet rodin:", q -> q > 0);
+   
+   > 20: for (int i = 0; i <= familyCount; i++)
+                            ^
+         Chyba: Při zadání n členů rodiny se generovalo n+1 osob
+	     Oprava: for (int i = 0; i < familyCount; i++)
+		 
+   > 21: int familySize = promptInt("Zadejte počet členů rodiny:", q -> q >= 0);
+                                                                           ^
+         Chyba: Nedává smysl moct zadat 0 členů rodiny
+         Oprava: int familySize = promptInt("Zadejte počet členů rodiny:", q -> q > 0);
+	
+ > mainMenu()
+   > 35: System.out.println("4. Uprav rodinu");
+                                      ^~~~~^
+         Chyba: Dle zadání upravujeme osobu, nikoli rodinu
+		 Oprava: System.out.println("4. Uprav osobu");
+		 
+ > saveToFile()
+   > 88: bw.write(person.getAddress().getStreet());
+                                      ^~~~~~~~~~^
+         Chyba: Do souboru se místo města podruhé ukládá ulice
+		 Oprava: bw.write(person.getAddress().getCity()); 
+ 
+ - Generator
+ > getRandomItem()
+   > 41: int index = rnd.nextInt(array.length + 1);
+                                             ^~~^
+         Chyba: Při generování náhodného čísla se mohlo stát, že při poli o délce n (rozsah indexu 0 - n-1) se vygenerovalo číslo n -> Index out of bounds
+         Oprava: int index = rnd.nextInt(array.length);
